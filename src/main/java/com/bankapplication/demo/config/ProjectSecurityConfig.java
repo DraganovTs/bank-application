@@ -20,11 +20,13 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class ProjectSecurityConfig {
 
     public static final String[] NOT_PERMITTED_REQUESTS = {"/myAccount", "/myBalance", "/myLoans", "/myCards"};
-    public static final String[] PERMITTED_REQUESTS = {"/notices", "/contact"};
+    public static final String[] PERMITTED_REQUESTS = {"/notices", "/contact", "/register"};
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        return http.authorizeHttpRequests((requests) -> {
+        return http
+                .csrf((csrf)->csrf.disable())
+                .authorizeHttpRequests((requests) -> {
                     requests.requestMatchers(NOT_PERMITTED_REQUESTS).authenticated();
                     requests.requestMatchers(PERMITTED_REQUESTS).permitAll();
                 })
@@ -50,10 +52,10 @@ public class ProjectSecurityConfig {
 //
 //    }
 
-    @Bean
-    public UserDetailsService userDetailsService(DataSource dataSource) {
-        return new JdbcUserDetailsManager(dataSource);
-    }
+//    @Bean
+//    public UserDetailsService userDetailsService(DataSource dataSource) {
+//        return new JdbcUserDetailsManager(dataSource);
+//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
