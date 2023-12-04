@@ -1,52 +1,84 @@
 package com.bankapplication.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "customer")
 public class Customer {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
 
+    private String name;
+
     private String email;
+
+    @Column(name = "mobile_number")
+    private String mobileNumber;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String pwd;
+
     private String role;
+
+    @Column(name = "create_dt")
+    private String createDt;
 
     public int getId() {
         return id;
     }
 
-    public Customer setId(int id) {
+    public void setId(int id) {
         this.id = id;
-        return this;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public Customer setEmail(String email) {
+    public void setEmail(String email) {
         this.email = email;
-        return this;
+    }
+
+    public String getMobileNumber() {
+        return mobileNumber;
+    }
+
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
     }
 
     public String getPwd() {
         return pwd;
     }
 
-    public Customer setPwd(String pwd) {
+    public void setPwd(String pwd) {
         this.pwd = pwd;
-        return this;
     }
 
     public String getRole() {
         return role;
     }
 
-    public Customer setRole(String role) {
+    public void setRole(String role) {
         this.role = role;
-        return this;
+    }
+
+    public String getCreateDt() {
+        return createDt;
+    }
+
+    public void setCreateDt(String createDt) {
+        this.createDt = createDt;
     }
 }

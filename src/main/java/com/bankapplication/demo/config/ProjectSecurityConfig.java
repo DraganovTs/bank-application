@@ -20,7 +20,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 public class ProjectSecurityConfig {
 
-    public static final String[] NOT_PERMITTED_REQUESTS = {"/myAccount", "/myBalance", "/myLoans", "/myCards"};
+    public static final String[] NOT_PERMITTED_REQUESTS = {"/myAccount", "/myBalance", "/myLoans", "/myCards","/user"};
     public static final String[] PERMITTED_REQUESTS = {"/notices", "/contact", "/register"};
 
     @Bean
