@@ -1,6 +1,9 @@
 package com.bankapplication.demo.config;
 
+import com.bankapplication.demo.filter.AuthoritiesLoggingAfterFilter;
+import com.bankapplication.demo.filter.AuthoritiesLoggingAtFilter;
 import com.bankapplication.demo.filter.CsrfCookieFilter;
+import com.bankapplication.demo.filter.RequestValidationBeforeFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -50,13 +53,12 @@ public class ProjectSecurityConfig {
                         .ignoringRequestMatchers(CSRF_PERMITTED_REQUESTS)
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
+                .addFilterBefore(new RequestValidationBeforeFilter(), BasicAuthenticationFilter.class)
+                .addFilterAt(new AuthoritiesLoggingAtFilter(), BasicAuthenticationFilter.class)
+                .addFilterAfter(new AuthoritiesLoggingAfterFilter(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests((requests) -> {
-//                    requests.requestMatchers("/myAccount").hasAuthority("VIEWACCOUNT");
-//                    requests.requestMatchers("/myBalance").hasAnyAuthority("VIEWACCOUNT","VIEWBALANCE");
-//                    requests.requestMatchers("/myLoans").hasAuthority("VIEWLOANS");
-//                    requests.requestMatchers("/myCards").hasAuthority("VIEWCARDS");
                     requests.requestMatchers("/myAccount").hasRole("USER");
-                    requests.requestMatchers("/myBalance").hasAnyRole("USER","ADMIN");
+                    requests.requestMatchers("/myBalance").hasAnyRole("USER", "ADMIN");
                     requests.requestMatchers("/myLoans").hasRole("USER");
                     requests.requestMatchers("/myCards").hasRole("USER");
                     requests.requestMatchers("/user").authenticated();
@@ -87,23 +89,3 @@ public class ProjectSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 }
-//    @Bean
-//    public InMemoryUserDetailsManager userDetailsManager() {
-//        UserDetails admin = User
-//                .withUsername("admin")
-//                .password("12345")
-//                .authorities("admin")
-//                .build();
-//        UserDetails user = User
-//                .withUsername("user")
-//                .password("12345")
-//                .authorities("read")
-//                .build();
-//        return new InMemoryUserDetailsManager(admin, user);
-//
-//    }
-
-//    @Bean
-//    public UserDetailsService userDetailsService(DataSource dataSource) {
-//        return new JdbcUserDetailsManager(dataSource);
-//    }
