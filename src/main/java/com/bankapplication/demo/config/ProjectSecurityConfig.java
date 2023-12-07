@@ -59,7 +59,7 @@ public class ProjectSecurityConfig {
                 .authorizeHttpRequests((requests) -> {
                     requests.requestMatchers("/myAccount").hasRole("USER");
                     requests.requestMatchers("/myBalance").hasAnyRole("USER", "ADMIN");
-                    requests.requestMatchers("/myLoans").hasRole("USER");
+                    requests.requestMatchers("/myLoans").authenticated();
                     requests.requestMatchers("/myCards").hasRole("USER");
                     requests.requestMatchers("/user").authenticated();
                     requests.requestMatchers(PERMITTED_REQUESTS).permitAll();
