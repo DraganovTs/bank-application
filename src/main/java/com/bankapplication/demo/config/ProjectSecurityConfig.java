@@ -1,9 +1,6 @@
 package com.bankapplication.demo.config;
 
-import com.bankapplication.demo.filter.AuthoritiesLoggingAfterFilter;
-import com.bankapplication.demo.filter.AuthoritiesLoggingAtFilter;
-import com.bankapplication.demo.filter.CsrfCookieFilter;
-import com.bankapplication.demo.filter.RequestValidationBeforeFilter;
+import com.bankapplication.demo.filter.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +24,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.sql.DataSource;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -45,8 +43,8 @@ public class ProjectSecurityConfig {
         requestHandler.setCsrfRequestAttributeName("_csrf");
 
         return http
-                .securityContext((context) -> context.requireExplicitSave(false))
-                .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+                .sessionManagement((sessionManagement) -> sessionManagement
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //jwt token
                 .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer
                         .configurationSource(corsConfigurationSource()))
                 .csrf((csrf) -> csrf.csrfTokenRequestHandler(requestHandler)
@@ -56,6 +54,8 @@ public class ProjectSecurityConfig {
                 .addFilterBefore(new RequestValidationBeforeFilter(), BasicAuthenticationFilter.class)
                 .addFilterAt(new AuthoritiesLoggingAtFilter(), BasicAuthenticationFilter.class)
                 .addFilterAfter(new AuthoritiesLoggingAfterFilter(), BasicAuthenticationFilter.class)
+                .addFilterAfter(new JWTTokenGeneratorFilter(), BasicAuthenticationFilter.class)
+                .addFilterBefore(new JWTTokenValidatorFilter(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests((requests) -> {
                     requests.requestMatchers("/myAccount").hasRole("USER");
                     requests.requestMatchers("/myBalance").hasAnyRole("USER", "ADMIN");
@@ -77,6 +77,7 @@ public class ProjectSecurityConfig {
         config.setAllowedMethods(Collections.singletonList("*"));
         config.setAllowCredentials(true);
         config.setAllowedHeaders(Collections.singletonList("*"));
+        config.setExposedHeaders(Arrays.asList("Authorization")); //gwt token
         config.setMaxAge(3600L);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
