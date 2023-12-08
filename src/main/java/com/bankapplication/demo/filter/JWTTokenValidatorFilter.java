@@ -1,11 +1,8 @@
 package com.bankapplication.demo.filter;
 
 import com.bankapplication.demo.constants.SecurityConstants;
-import com.bankapplication.demo.model.Authority;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SignatureException;
-import io.jsonwebtoken.security.WeakKeyException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
