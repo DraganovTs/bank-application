@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-@Component
+//@Component  after KEYCLOAK
 public class CustomBankUsernamePwdAuthenticationProvider implements AuthenticationProvider {
 
     private final CustomerRepository customerRepository;
