@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //@Service
-// we use custom authentication provider
+// we use custom authentication provider now
 public class BankUserDetails implements UserDetailsService {
 
     private final CustomerRepository customerRepository;
