@@ -3,7 +3,6 @@ package com.bankapplication.demo.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Set;
 
@@ -27,7 +26,7 @@ public class Customer {
     private String role;
 
     @Column(name = "create_dt")
-    private String createDt;
+    private String createDate;
 
     @JsonIgnore
     @OneToMany(mappedBy = "customer",fetch = FetchType.EAGER)
@@ -90,11 +89,11 @@ public class Customer {
         this.role = role;
     }
 
-    public String getCreateDt() {
-        return createDt;
+    public String getCreateDate() {
+        return createDate;
     }
 
-    public void setCreateDt(String createDt) {
-        this.createDt = createDt;
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
     }
 }
